@@ -1,14 +1,15 @@
-grammar Math;
+grammar Simple;
 
-// Define the entry point
-expr:   (term ('+' term | '-' term)*)? EOF;
+// productions for syntax analysis
+program returns [String s]: e=expr EOF {$s = $e.s; } ;
+expr returns [String s]: t=term r=rest {$s = $t.s + $r.s;} ;
+rest returns [String s]
+ : PLUS t=term r=rest                  {$s = $t.s + "+" + $r.s;}
+ | MINUS t=term r=rest                 {$s = $t.s + "-" + $r.s;}
+ | /* empty */                         {$s = "";} ;
+term returns [String s] : DIGIT        {$s = $DIGIT.text;};
 
-// Define terms for multiplication/division
-term:   factor ('*' factor | '/' factor)*;
-
-// Define factors as numbers or expressions in parentheses
-factor: INT | '(' expr ')';
-
-// Lexer rules
-INT :   [0-9]+;
-WS  :   [ \t\r\n]+ -> skip; // Skip whitespace
+// productions for lexical analysis
+PLUS : '+' ;
+MINUS : '-' ;
+DIGIT : [0-9];
