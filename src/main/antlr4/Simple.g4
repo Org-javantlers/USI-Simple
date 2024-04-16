@@ -12,4 +12,4 @@ term returns [String s] : DIGIT        {$s = $DIGIT.text;};
 // productions for lexical analysis
 PLUS : '+' ;
 MINUS : '-' ;
-DIGIT : [0-9];
+DIGIT : [0-9]+;
